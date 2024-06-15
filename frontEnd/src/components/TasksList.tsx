@@ -32,9 +32,6 @@ const TasksList = ({ refetchTasks, executeRefetch, setAlertMessage, setAlertType
           console.error(err);
         })
       }
-      console.log({tasks});
-      
-  
       executeRefetch(false)
     }
     fetchTasks()
