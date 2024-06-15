@@ -5,3 +5,11 @@
 html,body, #root{
     height: 100%;
 }
+
+.pagination-item{
+    @apply join-item btn btn-square btn-outline hover:bg-primary checked:!bg-primary !border-primary focus:!outline-primary;
+}
+
+.action-button{
+    @apply btn btn-outline !border-2 min-h-fit h-fit py-1.5 rounded-full hover:!text-white;
+}

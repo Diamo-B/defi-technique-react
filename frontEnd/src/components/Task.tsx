@@ -1,34 +1,38 @@
+import { Dispatch, SetStateAction, useState } from "react";
 import useTask from "../hooks/useTask";
+import ConfirmDeletion from "./confirmDeletion";
 
 interface Props {
   id: number;
-  text: string;
+  title: string;
+  executeRefetch: Dispatch<SetStateAction<boolean>>;
+  setAlertMessage: Dispatch<SetStateAction<string>>;
+  setAlertType: Dispatch<SetStateAction<"error" | "success" | null>>;
+  showAlert: Dispatch<SetStateAction<boolean>>;
 }
 
-const Task = ({ id, text }: Props) => {
-  const {editTask, deleteTask} = useTask();
 
+const Task = ({ id, title, executeRefetch, setAlertMessage, setAlertType, showAlert }: Props) => {
+  const { deleteTask } = useTask({executeRefetch, setAlertMessage, setAlertType, showAlert});
+  const [show, setShow] = useState<boolean>(false);
   return (
-    <div className="flex justify-between items-center py-3 w-full">
-      <span>{text}</span>
-      <div className="flex gap-3">
-        <button className="btn btn-outline btn-warning !border-2 w-20 min-h-fit h-fit py-2 rounded-full hover:!text-white"
-          onClick={()=>{
-            editTask(id)
-          }}
-        >
-          Edit
-        </button>
-        <button
-          className="btn btn-outline btn-error !border-2 min-h-fit h-fit py-2 rounded-full hover:!text-white"
-          onClick={() => {
-            deleteTask(id);
-          }}
-        >
-          Remove
-        </button>
+    <>
+      <div className="flex justify-between items-center py-3 px-10 w-full hover:bg-slate-700/30 hover:cursor-pointer max-w-full">
+        <span className="overflow-hidden">{title.length > 40 ? title.slice(0, 40) + " ...." : title}</span>
+        <div className="flex gap-3">
+          <button
+            className="action-button btn-error hover:!text-slate-900"
+            onClick={() => setShow(true)}
+          >
+            Remove
+          </button>
+        </div>
       </div>
-    </div>
+      {
+        show &&
+        <ConfirmDeletion taskId={id} deleteTask={deleteTask} closeModal={() => setShow(false)} />
+      }
+    </>
   );
 };
 
